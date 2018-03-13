@@ -2,39 +2,40 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 
 class ListBooks extends Component {
+	/**
+	 * @function 处理书架名,与shelf的值格式保持一致
+	 * @param 书架名 String
+	 */
+	encode = (str) => {
+		return str
+			.toLowerCase()
+			.replace(/( |^)[a-z]/g, (L) => L.toUpperCase())
+			.replace(/\s/gi, '')
+			.replace(/(\w)/, function(v) {
+				return v.toLowerCase();
+			});
+	};
+
 	render() {
-		/**
-         * 处理书架名，与book.shelf的值保持一致
-         * @param {书架名} str 
-         */
-		function encode(str) {
-			return str
-				.toLowerCase()
-				.replace(/( |^)[a-z]/g, (L) => L.toUpperCase())
-				.replace(/\s/gi, '')
-				.replace(/(\w)/, function(v) {
-					return v.toLowerCase();
-				});
-		}
-
-		const { books } = this.props;
-
+		const { books, onMoveBook } = this.props;
 		const shelfInfo = [ { title: 'Currently Reading' }, { title: 'Want to Read' }, { title: 'Read' } ];
+
 		return (
 			<div className="list-books">
 				<div className="list-books-title">
 					<h1>MyReads</h1>
 				</div>
+
 				<div className="list-books-content">
 					<div>
 						{shelfInfo.map((shelf) => (
-							<div className="bookshelf">
+							<div className="bookshelf" key={shelf.title}>
 								<h2 className="bookshelf-title">{shelf.title}</h2>
 								<div className="bookshelf-books">
 									<ol className="books-grid">
 										{books
 											.filter((b) => {
-												return b.shelf === encode(shelf.title);
+												return b.shelf === this.encode(shelf.title);
 											})
 											.map((book) => (
 												<li key={book.id}>
@@ -49,7 +50,12 @@ class ListBooks extends Component {
 																}}
 															/>
 															<div className="book-shelf-changer">
-																<select>
+																<select
+																	value={book.shelf}
+																	onChange={(event) => {
+																		onMoveBook(book, event.target.value);
+																	}}
+																>
 																	<option value="none" disabled>
 																		Move to...
 																	</option>
