@@ -23,13 +23,14 @@ class BooksApp extends React.Component {
 	 * @param 书, 书架
 	 */
 	updateShelf = (book, shelf) => {
-		BooksAPI.update(book, shelf);
-		BooksAPI.getAll().then((books) => {
-			books.sort(sortBy('title'));
-			this.setState({ books });
+		BooksAPI.update(book, shelf).then(() => {
+			BooksAPI.getAll().then((books) => {
+				books.sort(sortBy('title'));
+				this.setState({ books });
+			});
 		});
 	};
-	
+
 	render() {
 		return (
 			<div className="app">

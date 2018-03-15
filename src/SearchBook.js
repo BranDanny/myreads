@@ -49,6 +49,15 @@ class SearchBook extends Component {
 				return 'none';
 			}
 		};
+
+		const checkImage = (book) => {
+			if (book.imageLinks) {
+				return `url(${book.imageLinks.thumbnail})`;
+			} else {
+				return `url(http://www.blog.lehren.tum.de/wp-content/uploads/2013/08/Udacitiy_Logo2.png)`
+			}
+		};
+		
 		return (
 			<div className="search-books">
 				<div className="search-books-bar">
@@ -80,7 +89,7 @@ class SearchBook extends Component {
 											style={{
 												width: 128,
 												height: 192,
-												backgroundImage: `url(${book.imageLinks.thumbnail})`
+												backgroundImage: checkImage(book)
 											}}
 										/>
 										<div className="book-shelf-changer">
